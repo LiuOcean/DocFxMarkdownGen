@@ -147,13 +147,7 @@ await Parallel.ForEachAsync(items, async (item, _) =>
     if (item.CommentId.StartsWith("T:"))
     {
         var str = new StringBuilder();
-        str.AppendLine("---");
-        str.AppendLine("title: " + item.Type + " " + item.Name);
-        str.AppendLine("sidebar_label: " + item.Name);
-        if (item.Summary != null)
-            // todo: run a regex replace to get rid of hyperlinks and inline code blocks?
-            str.AppendLine($"description: \"{GetSummary(item.Summary)?.Trim().Replace("\"", "\\\"")}\"");
-        str.AppendLine("---");
+
         str.AppendLine($"# {item.Type} {HtmlEscape(item.Name)}");
         str.AppendLine(GetSummary(item.Summary)?.Trim());
         str.AppendLine();
@@ -309,12 +303,7 @@ await Parallel.ForEachAsync(items, async (item, _) =>
     else if (item.Type == "Namespace")
     {
         var str = new StringBuilder();
-        str.AppendLine("---");
-        str.AppendLine("title: " + item.Type + " " + item.Name);
-        str.AppendLine("sidebar_label: Index");
-        str.AppendLine("sidebar_position: 0");
-        str.AppendLine("---");
-        str.AppendLine($"# Namespace {HtmlEscape(item.Name)}");
+        str.AppendLine($"# {HtmlEscape(item.Name)}");
 
         void Do(string type, string header)
         {
@@ -341,13 +330,8 @@ await Parallel.ForEachAsync(items, async (item, _) =>
 // generate index page
 {
     var str = new StringBuilder();
-    str.AppendLine("---");
-    str.AppendLine("title: Index");
-    str.AppendLine("sidebar_label: Index");
-    str.AppendLine("sidebar_position: 0");
-    str.AppendLine($"slug: {config.IndexSlug}");
-    str.AppendLine("---");
-    str.AppendLine("# API Index");
+
+    str.AppendLine("# API");
     str.AppendLine("## Namespaces");
     foreach (var @namespace in items.Where(i => i.Type == "Namespace").OrderBy(i => i.Name))
         str.AppendLine($"* {HtmlEscape(Link(@namespace.Uid, indexLink: true))}");
